@@ -1,5 +1,6 @@
 package me.shipsimfan.rummikub.game;
 
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,17 +56,20 @@ public class Game {
 		if (players[currentPlayer].getHand().equals(""))
 			winner = currentPlayer;
 	}
-	
+
+	public void draw() {
+	}
+
 	public void endTurn() {
 		// Select next player
-		if(currentPlayer == 2)
+		if (currentPlayer == 2)
 			currentPlayer = 0;
 		else
 			currentPlayer++;
-		
+
 		// Clear flags on tiles
-		for(List<Tile> meld : table)
-			for(Tile t : meld)
+		for (List<Tile> meld : table)
+			for (Tile t : meld)
 				t.setNewPlay(false);
 	}
 
@@ -98,6 +102,10 @@ public class Game {
 		}
 
 		return string;
+	}
+
+	public String getHand(int player) {
+		return "";
 	}
 
 	public String getCurrentHand() {
