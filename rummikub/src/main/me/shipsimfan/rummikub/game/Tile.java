@@ -20,6 +20,7 @@ public class Tile {
 
 	private Color color;
 	private int number;
+	private boolean newPlay;
 
 	public Tile(String name) {
 		color = switch (name.charAt(0)) {
@@ -38,11 +39,21 @@ public class Tile {
 
 		if (number < 1 || number > 13)
 			throw new InvalidParameterException("Invalid number for tile name");
+
+		newPlay = false;
+	}
+
+	public void setNewPlay(boolean value) {
+		newPlay = value;
+	}
+
+	public int getNumber() {
+		return number;
 	}
 
 	@Override
 	public String toString() {
-		return color.toString() + number;
+		return (newPlay ? "*" : "") + color.toString() + number;
 	}
 
 	@Override
