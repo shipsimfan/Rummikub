@@ -3,11 +3,13 @@ package me.shipsimfan.rummikub.game;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 public class Game {
 	private List<List<Tile>> table;
 	private Player[] players;
 	private int currentPlayer;
+	private Stack<Tile> deck;
 
 	private int winner;
 
@@ -17,6 +19,10 @@ public class Game {
 		currentPlayer = 0;
 
 		winner = -1;
+
+		this.deck = new Stack<Tile>();
+		for(Tile t : deck)
+			this.deck.add(t);
 	}
 
 	// Play without meld number creates a new meld and returns the number
@@ -58,6 +64,14 @@ public class Game {
 	}
 
 	public void draw() {
+		// Remove tile from deck
+		Tile t = deck.pop();
+		
+		// Give tile to current player
+		players[currentPlayer].addTile(t);
+		
+		// End turn
+		endTurn();
 	}
 
 	public void endTurn() {
@@ -105,11 +119,14 @@ public class Game {
 	}
 
 	public String getHand(int player) {
-		return "";
+		if(player < 0 || player > 2)
+			throw new InvalidParameterException();
+		
+		return players[player].getHand();
 	}
 
 	public String getCurrentHand() {
-		return players[currentPlayer].getHand();
+		return getHand(currentPlayer);
 	}
 
 	public boolean hasWinner() {

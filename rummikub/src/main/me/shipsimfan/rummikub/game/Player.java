@@ -42,6 +42,11 @@ public class Player {
 		if (pointsRemaining < 0)
 			pointsRemaining = 0;
 	}
+	
+	public void addTile(Tile t) {
+		hand.add(t);
+		hand.sort(new Tile.TileComparator());
+	}
 
 	public Tile takeTile(String tile) {
 		Tile target = new Tile(tile);
