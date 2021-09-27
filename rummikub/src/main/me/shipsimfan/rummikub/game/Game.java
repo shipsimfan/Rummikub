@@ -55,6 +55,8 @@ public class Game {
 		if (players[currentPlayer].getHand().equals(""))
 			winner = currentPlayer;
 	}
+	
+	public void endTurn() {}
 
 	public int getCurrentPlayer() {
 		return currentPlayer;
