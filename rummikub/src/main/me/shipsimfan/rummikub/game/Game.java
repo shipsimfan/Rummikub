@@ -56,7 +56,18 @@ public class Game {
 			winner = currentPlayer;
 	}
 	
-	public void endTurn() {}
+	public void endTurn() {
+		// Select next player
+		if(currentPlayer == 2)
+			currentPlayer = 0;
+		else
+			currentPlayer++;
+		
+		// Clear flags on tiles
+		for(List<Tile> meld : table)
+			for(Tile t : meld)
+				t.setNewPlay(false);
+	}
 
 	public int getCurrentPlayer() {
 		return currentPlayer;
