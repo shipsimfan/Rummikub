@@ -136,4 +136,8 @@ public class Game {
 	public int getWinner() {
 		return winner;
 	}
+	
+	public int getScore(int player) {
+		return 0;
+	}
 }
