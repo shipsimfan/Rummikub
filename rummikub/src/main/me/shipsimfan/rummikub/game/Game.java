@@ -12,6 +12,7 @@ public class Game {
 	private Stack<Tile> deck;
 
 	private int winner;
+	private int[] scores;
 
 	public Game(Tile[] deck, Player player1, Player player2, Player player3) {
 		table = new ArrayList<>();
@@ -21,7 +22,7 @@ public class Game {
 		winner = -1;
 
 		this.deck = new Stack<Tile>();
-		for(Tile t : deck)
+		for (Tile t : deck)
 			this.deck.add(t);
 	}
 
@@ -59,17 +60,28 @@ public class Game {
 		table.get(meld).add(t);
 
 		// Check for winner
-		if (players[currentPlayer].getHand().equals(""))
+		if (players[currentPlayer].getHand().equals("")) {
+			// Set winner
 			winner = currentPlayer;
+
+			// Calculate scores
+			scores = new int[] { 0, 0, 0 };
+			for (int i = 0; i < 3; i++) {
+				if(i == winner)
+					continue;
+				
+				scores[i] = players[i].calculateScore();
+			}
+		}
 	}
 
 	public void draw() {
 		// Remove tile from deck
 		Tile t = deck.pop();
-		
+
 		// Give tile to current player
 		players[currentPlayer].addTile(t);
-		
+
 		// End turn
 		endTurn();
 	}
@@ -119,9 +131,9 @@ public class Game {
 	}
 
 	public String getHand(int player) {
-		if(player < 0 || player > 2)
+		if (player < 0 || player > 2)
 			throw new InvalidParameterException();
-		
+
 		return players[player].getHand();
 	}
 
@@ -136,8 +148,11 @@ public class Game {
 	public int getWinner() {
 		return winner;
 	}
-	
+
 	public int getScore(int player) {
-		return 0;
+		if (player < 0 || player > 2)
+			throw new InvalidParameterException();
+
+		return scores[player];
 	}
 }

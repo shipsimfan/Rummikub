@@ -43,6 +43,19 @@ public class Player {
 			pointsRemaining = 0;
 	}
 	
+	public int calculateScore() {
+		int score = 0;
+		
+		for(Tile t : hand) {
+			if(t.getNumber() > 10)
+				score -= 10;
+			else
+				score -= t.getNumber();
+		}
+		
+		return score;
+	}
+	
 	public void addTile(Tile t) {
 		hand.add(t);
 		hand.sort(new Tile.TileComparator());
