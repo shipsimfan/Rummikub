@@ -9,8 +9,13 @@ import java.net.Socket;
 public class Server {
 	private final ServerSocket socket;
 	private Client[] clients;
+	
+	private static boolean singleRun = false;
 
 	public static void main(String[] args) {
+		if(args.length > 1)
+			singleRun = true;
+		
 		try {
 			// Start server
 			Server server = new Server(Config.PORT);
@@ -39,6 +44,9 @@ public class Server {
 			// Disconnect players
 			for (int i = 0; i < 3; i++)
 				clients[i].close();
+			
+			if(singleRun)
+				return;
 		}
 	}
 
