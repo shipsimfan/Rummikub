@@ -2,6 +2,7 @@ package me.shipsimfan.rummikub.game;
 
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Stack;
 
@@ -14,6 +15,42 @@ public class Game {
 	private int winner;
 	private int[] scores;
 
+	public Game() {
+		table = new ArrayList<>();
+		
+		// Create the deck
+		deck = new Stack<>();
+		for(int s = 0; s < 4; s++) {
+			String color = switch(s) {
+			case 0 -> "R";
+			case 1 -> "B";
+			case 2 -> "G";
+			case 3 -> "O";
+			default -> throw new InvalidParameterException();
+			};
+			
+			for(int i = 1; i < 14; i++) {
+				deck.add(new Tile(color + i));
+				deck.add(new Tile(color + i));
+			}
+		}
+		Collections.shuffle(deck);
+
+		// Deal the hands
+		players = new Player[3];
+		for(int p = 0; p < 3; p++) {
+			Tile[] hand = new Tile[14];
+			for(int i = 0; i < 14; i++)
+				hand[i] = deck.pop();
+			
+			players[p] = new Player(hand);
+		}
+		
+		currentPlayer = 0;
+		
+		winner = -1;
+	}
+	
 	public Game(Tile[] deck, Player player1, Player player2, Player player3) {
 		table = new ArrayList<>();
 		players = new Player[] { player1, player2, player3 };

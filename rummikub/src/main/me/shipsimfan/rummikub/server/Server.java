@@ -1,6 +1,9 @@
 package me.shipsimfan.rummikub.server;
 
 import me.shipsimfan.rummikub.Config;
+import me.shipsimfan.rummikub.game.Game;
+import me.shipsimfan.rummikub.game.Player;
+import me.shipsimfan.rummikub.game.Tile;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -9,16 +12,19 @@ import java.net.Socket;
 public class Server {
 	private final ServerSocket socket;
 	private Client[] clients;
-	
-	private static boolean singleRun = false;
+
+	private Tile[] deck;
+	private Tile[][] players;
 
 	public static void main(String[] args) {
-		if(args.length > 1)
-			singleRun = true;
-		
 		try {
 			// Start server
-			Server server = new Server(Config.PORT);
+			Server server;
+			if (args.length > 1)
+				server = new Server(Config.PORT, args[1], new String[] { args[2], args[3], args[4] });
+			else
+				server = new Server(Config.PORT);
+
 			System.out.println("Server listening on port " + Config.PORT);
 
 			// Run server
@@ -31,6 +37,24 @@ public class Server {
 
 	public Server(int port) throws IOException {
 		socket = new ServerSocket(port);
+		players = new Tile[0][];
+	}
+
+	public Server(int port, String deck, String[] players) throws IOException {
+		socket = new ServerSocket(port);
+
+		String[] deckTiles = deck.split(",");
+		this.deck = new Tile[deckTiles.length];
+		for (int i = 0; i < deckTiles.length; i++)
+			this.deck[i] = new Tile(deckTiles[i]);
+
+		this.players = new Tile[3][];
+		for (int p = 0; p < 3; p++) {
+			String[] playerTiles = players[p].split(",");
+			this.players[p] = new Tile[playerTiles.length];
+			for (int i = 0; i < playerTiles.length; i++)
+				this.players[p][i] = new Tile(playerTiles[i]);
+		}
 	}
 
 	public void run() throws IOException {
@@ -44,9 +68,6 @@ public class Server {
 			// Disconnect players
 			for (int i = 0; i < 3; i++)
 				clients[i].close();
-			
-			if(singleRun)
-				return;
 		}
 	}
 
@@ -54,6 +75,52 @@ public class Server {
 		// Tell all clients to start game
 		sendToAll("begin");
 		sendToAll("The game is beginning!");
+
+		// Rig if necessary
+		Game game;
+		if (players.length == 0)
+			game = new Game();
+		else {
+			game = new Game(deck, new Player(players[0]), new Player(players[1]), new Player(players[2]));
+		}
+
+		// Run game
+		while (!game.hasWinner()) {
+			int currentPlayer = game.getCurrentPlayer();
+
+			sendToAll("");
+			sendToAll("Player " + (currentPlayer + 1) + "'s turn");
+
+			boolean draw = true;
+			while (true) {
+				clients[currentPlayer].send("Table: " + game.getTable());
+				clients[currentPlayer].send("Your hand: " + game.getCurrentHand());
+				clients[currentPlayer].send("play");
+
+				String response = clients[currentPlayer].read();
+				if (response.equals("")) {
+					sendToAll("Board: " + game.getTable());
+
+					if (draw)
+						game.draw();
+					else
+						game.endTurn();
+
+					break;
+				} else if (response.equals("end")) {
+					sendToAll("end");
+					return;
+				}
+
+				draw = false;
+
+				String meld = clients[currentPlayer].read();
+				if (meld.equals(""))
+					game.play(response);
+				else
+					game.play(response, Integer.parseInt(meld));
+			}
+		}
 
 		// Tell each player to disconnect
 		sendToAll("end");

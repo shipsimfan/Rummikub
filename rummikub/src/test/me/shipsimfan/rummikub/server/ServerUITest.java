@@ -126,19 +126,19 @@ public class ServerUITest {
 		assertEquals("Player 3's turn", input3.readUTF());
 
 		assertEquals("Table: {R11,R12,R13}", input3.readUTF());
-		assertEquals("Your hand: R2,R13,B13,G13,G2,O1,O2", input3.readUTF());
+		assertEquals("Your hand: R2,R13,B13,G2,G13,O1,O2", input3.readUTF());
 		assertEquals("play", input3.readUTF());
 		output3.writeUTF("R13");
 		output3.writeUTF("");
 
 		assertEquals("Table: {R11,R12,R13},{*R13}", input3.readUTF());
-		assertEquals("Your hand: R2,B13,G13,G2,O1,O2", input3.readUTF());
+		assertEquals("Your hand: R2,B13,G2,G13,O1,O2", input3.readUTF());
 		assertEquals("play", input3.readUTF());
 		output3.writeUTF("B13");
 		output3.writeUTF("1");
 
 		assertEquals("Table: {R11,R12,R13},{*R13,*B13}", input3.readUTF());
-		assertEquals("Your hand: R2,G13,G2,O1,O2", input3.readUTF());
+		assertEquals("Your hand: R2,G2,G13,O1,O2", input3.readUTF());
 		assertEquals("play", input3.readUTF());
 		output3.writeUTF("G13");
 		output3.writeUTF("1");
