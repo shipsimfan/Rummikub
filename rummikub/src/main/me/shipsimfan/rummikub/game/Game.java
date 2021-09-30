@@ -17,19 +17,19 @@ public class Game {
 
 	public Game() {
 		table = new ArrayList<>();
-		
+
 		// Create the deck
 		deck = new Stack<>();
-		for(int s = 0; s < 4; s++) {
-			String color = switch(s) {
+		for (int s = 0; s < 4; s++) {
+			String color = switch (s) {
 			case 0 -> "R";
 			case 1 -> "B";
 			case 2 -> "G";
 			case 3 -> "O";
 			default -> throw new InvalidParameterException();
 			};
-			
-			for(int i = 1; i < 14; i++) {
+
+			for (int i = 1; i < 14; i++) {
 				deck.add(new Tile(color + i));
 				deck.add(new Tile(color + i));
 			}
@@ -38,19 +38,19 @@ public class Game {
 
 		// Deal the hands
 		players = new Player[3];
-		for(int p = 0; p < 3; p++) {
+		for (int p = 0; p < 3; p++) {
 			Tile[] hand = new Tile[14];
-			for(int i = 0; i < 14; i++)
+			for (int i = 0; i < 14; i++)
 				hand[i] = deck.pop();
-			
+
 			players[p] = new Player(hand);
 		}
-		
+
 		currentPlayer = 0;
-		
+
 		winner = -1;
 	}
-	
+
 	public Game(Tile[] deck, Player player1, Player player2, Player player3) {
 		table = new ArrayList<>();
 		players = new Player[] { player1, player2, player3 };
@@ -104,12 +104,20 @@ public class Game {
 			// Calculate scores
 			scores = new int[] { 0, 0, 0 };
 			for (int i = 0; i < 3; i++) {
-				if(i == winner)
+				if (i == winner)
 					continue;
-				
+
 				scores[i] = players[i].calculateScore();
 			}
 		}
+	}
+
+	// Reuse without target meld number creates a new meld and returns the number
+	public int reuse(int initialMeld, String tile) {
+		return 0;
+	}
+	
+	public void reuse(int initialMeld, String tile, int targetMeld) {
 	}
 
 	public void draw() {
