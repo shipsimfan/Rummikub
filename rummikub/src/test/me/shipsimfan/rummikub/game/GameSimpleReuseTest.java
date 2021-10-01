@@ -154,7 +154,7 @@ public class GameSimpleReuseTest {
 
 		// Verify game state
 		assertEquals("R1", game.getCurrentHand());
-		assertEquals("{R11,O11,B11,G11},{R12,B12,G12},{O7,O8,O9},{O11,O12,O13},{*O8,*O9,!O10}", game.getTable());
+		assertEquals("{R11,O11,B11,G11},{R12,B12,G12},{O7,O8,O9},{*O8,*O9,!O10},{O11,O12,O13}", game.getTable());
 		assertEquals(0, game.getCurrentPlayer());
 		assertFalse(game.hasWinner());
 	}

@@ -2,6 +2,7 @@ package me.shipsimfan.rummikub.game;
 
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Stack;
@@ -85,7 +86,7 @@ public class Game {
 
 		// Take tile from hand
 		Tile t = players[currentPlayer].takeTile(tile);
-		t.setNewPlay(true);
+		t.setNewPlay();
 
 		// Reduce initial 30 points
 		int amount = t.getNumber();
@@ -114,10 +115,55 @@ public class Game {
 
 	// Reuse without target meld number creates a new meld and returns the number
 	public int reuse(int initialMeld, String tile) {
-		return 0;
+		// Ignore plays after win
+		if (winner >= 0)
+			return 0;
+
+		// Create new meld
+		table.add(new ArrayList<>());
+		int meld = table.size() - 1;
+
+		// Play tile to new meld
+		if (reuse(initialMeld, tile, meld))
+			meld++;
+		return meld;
 	}
-	
-	public void reuse(int initialMeld, String tile, int targetMeld) {
+
+	public boolean reuse(int initialMeld, String tile, int targetMeld) {
+		// Take tile from initial meld
+		Tile t = new Tile(tile);
+		List<Tile> meld = table.get(initialMeld);
+		boolean found = false;
+		for (int i = 0; i < meld.size(); i++) {
+			if (meld.get(i).equals(t)) {
+				found = true;
+				if (i == 0 || i == meld.size() - 1)
+					;
+				else {
+					if (meld.get(i - 1).equals(new Tile(t.getColor(), t.getNumber() - 1))
+							&& meld.get(i + 1).equals(new Tile(t.getColor(), t.getNumber() + 1))) {
+
+						Tile[] newMeld = new Tile[meld.size() - i - 1];
+						for (int j = meld.size() - 1; j > i; j--) {
+							newMeld[j - i - 1] = meld.get(j);
+							meld.remove(j);
+						}
+						table.add(new ArrayList<>(Arrays.asList(newMeld)));
+					}
+				}
+				meld.remove(i);
+				break;
+			}
+		}
+
+		if (!found)
+			throw new InvalidParameterException();
+
+		// Place tile into new meld
+		t.setReuse();
+		table.get(targetMeld).add(t);
+
+		return false;
 	}
 
 	public void draw() {
@@ -141,7 +187,7 @@ public class Game {
 		// Clear flags on tiles
 		for (List<Tile> meld : table)
 			for (Tile t : meld)
-				t.setNewPlay(false);
+				t.clearFlags();
 	}
 
 	public int getCurrentPlayer() {

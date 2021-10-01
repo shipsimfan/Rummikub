@@ -21,39 +21,63 @@ public class Tile {
 	private Color color;
 	private int number;
 	private boolean newPlay;
+	private boolean reuse;
 
 	public Tile(String name) {
-		color = switch (name.charAt(0)) {
+		int number = Character.getNumericValue(name.charAt(1));
+		if (number == 1 && name.length() > 2) {
+			number *= 10;
+			number += Character.getNumericValue(name.charAt(2));
+		}
+		
+		constructor(name.charAt(0), number);
+	}
+	
+	public Tile(char color, int number) {
+		constructor(color, number);
+	}
+	
+	private void constructor(char color, int number) {
+		this.color = switch (color) {
 		case 'R' -> Color.RED;
 		case 'B' -> Color.BLUE;
 		case 'G' -> Color.GREEN;
 		case 'O' -> Color.ORANGE;
 		default -> throw new InvalidParameterException("Invalid color code for tile name");
 		};
-
-		number = Character.getNumericValue(name.charAt(1));
-		if (number == 1 && name.length() > 2) {
-			number *= 10;
-			number += Character.getNumericValue(name.charAt(2));
-		}
-
+		
 		if (number < 1 || number > 13)
 			throw new InvalidParameterException("Invalid number for tile name");
-
+		
+		this.number = number;
 		newPlay = false;
+		reuse = false;
 	}
 
-	public void setNewPlay(boolean value) {
-		newPlay = value;
+	public void setNewPlay() {
+		newPlay = true;
+	}
+	
+	public void setReuse() {
+		reuse = true;
+	}
+	
+	public void clearFlags() {
+		newPlay = false;
+		reuse = false;
 	}
 
 	public int getNumber() {
 		return number;
 	}
+	
+	public char getColor() {
+		return color.toString().charAt(0);
+	}
 
 	@Override
 	public String toString() {
-		return (newPlay ? "*" : "") + color.toString() + number;
+		return (newPlay ? "*" : "") + (reuse ? "!" : "") + color.toString() + number;
 	}
 
 	@Override
