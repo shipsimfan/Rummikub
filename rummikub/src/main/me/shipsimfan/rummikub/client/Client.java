@@ -64,14 +64,27 @@ public class Client {
 			if (message.equals("end"))
 				return;
 			else if (message.equals("play")) {
-				System.out.print("Enter a tile to play (Leave blank for end turn): ");
+				System.out.print("Enter a tile to play or meld to use from (Leave blank for end turn): ");
 				String tile = reader.readLine();
 				output.writeUTF(tile);
 
-				if (!tile.equals("") && !tile.equals("end")) {
-					System.out.print("Enter a meld to play it to (Leave blank for new): ");
-					String meld = reader.readLine();
-					output.writeUTF(meld);
+				if(tile.equals(""))
+					continue;
+					
+				try {
+					Integer.parseInt(tile);
+					
+					System.out.print("Enter a tile you would like to use: ");
+					output.writeUTF(reader.readLine());
+				
+					System.out.println("Enter the destination meld (Leave blank for new): ");
+					output.writeUTF(reader.readLine());
+				} catch (NumberFormatException e) {
+					if (!tile.equals("end")) {
+						System.out.print("Enter a meld to play it to (Leave blank for new): ");
+						String meld = reader.readLine();
+						output.writeUTF(meld);
+					}
 				}
 			} else // Display otherwise
 				System.out.println(message);

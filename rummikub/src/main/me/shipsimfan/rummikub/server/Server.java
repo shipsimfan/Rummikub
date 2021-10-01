@@ -112,13 +112,25 @@ public class Server {
 					return;
 				}
 
-				draw = false;
+				try {
+					int initialMeld = Integer.parseInt(response);
 
-				String meld = clients[currentPlayer].read();
-				if (meld.equals(""))
-					game.play(response);
-				else
-					game.play(response, Integer.parseInt(meld));
+					String tile = clients[currentPlayer].read();
+					String destinationMeld = clients[currentPlayer].read();
+
+					if (destinationMeld.equals(""))
+						game.reuse(initialMeld, tile, Integer.parseInt(destinationMeld));
+					else
+						game.reuse(initialMeld, tile);
+				} catch (NumberFormatException e) {
+					draw = false;
+
+					String meld = clients[currentPlayer].read();
+					if (meld.equals(""))
+						game.play(response);
+					else
+						game.play(response, Integer.parseInt(meld));
+				}
 			}
 		}
 
