@@ -133,6 +133,13 @@ public class Server {
 				}
 			}
 		}
+		
+		// Send each player score
+		sendToAll("Winner is player " + (game.getWinner() + 1));
+		sendToAll("Scores:");
+		sendToAll("Player 1: " + game.getScore(0));
+		sendToAll("Player 2: " + game.getScore(1));
+		sendToAll("Player 3: " + game.getScore(2));
 
 		// Tell each player to disconnect
 		sendToAll("end");
