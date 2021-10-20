@@ -32,6 +32,10 @@ public class Player {
 	public int getRemainingPoints() {
 		return pointsRemaining;
 	}
+	
+	public void resetPoints() {
+		pointsRemaining = 30;
+	}
 
 	public void reducePointsRemaining(int amount) {
 		if (pointsRemaining == 0)

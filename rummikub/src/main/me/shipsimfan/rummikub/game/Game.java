@@ -14,6 +14,7 @@ public class Game {
 	private Stack<Tile> deck;
 
 	private boolean draw;
+	private boolean initial30;
 
 	private int winner;
 	private int[] scores;
@@ -52,6 +53,7 @@ public class Game {
 		currentPlayer = 0;
 
 		draw = true;
+		initial30 = true;
 
 		winner = -1;
 	}
@@ -62,6 +64,7 @@ public class Game {
 		currentPlayer = 0;
 
 		draw = true;
+		initial30 = true;
 
 		winner = -1;
 
@@ -189,6 +192,11 @@ public class Game {
 	private void resetBoard() {
 		// TODO: Reset replayed tiles
 
+		// Reset points
+		if(initial30)
+			players[currentPlayer].resetPoints();
+		
+		// Reset newly played tiles
 		for (int j = 0; j < table.size(); j++) {
 			List<Tile> meld = table.get(j);
 			for (int i = 0; i < meld.size(); i++) {
@@ -213,6 +221,10 @@ public class Game {
 	}
 
 	private boolean verifyBoard() {
+		// Verify point status
+		if (initial30 && getCurrentRemainingPoints() != 0)
+			return false;
+
 		// Check each meld
 		for (List<Tile> meld : table) {
 			// Check meld length
@@ -290,9 +302,7 @@ public class Game {
 	public void endTurn() {
 		if (draw)
 			draw();
-
-		// Verify board
-		if (!verifyBoard()) {
+		else if (!verifyBoard()) {
 			// Reset and draw three
 			resetBoard();
 			draw();
@@ -305,6 +315,9 @@ public class Game {
 			currentPlayer = 0;
 		else
 			currentPlayer++;
+		
+		draw = true;
+		initial30 = getCurrentRemainingPoints() != 0;
 
 		// Clear flags on tiles
 		for (List<Tile> meld : table)
@@ -319,10 +332,10 @@ public class Game {
 	public int getRemainingPoints(int player) {
 		if (player < 0 || player > 2)
 			throw new InvalidParameterException();
-		
+
 		return players[player].getRemainingPoints();
 	}
-	
+
 	public int getCurrentRemainingPoints() {
 		return players[currentPlayer].getRemainingPoints();
 	}
