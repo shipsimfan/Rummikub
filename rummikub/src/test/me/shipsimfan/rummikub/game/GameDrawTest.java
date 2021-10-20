@@ -17,7 +17,7 @@ public class GameDrawTest {
 				new Player(new Tile[] { new Tile("R1") }), new Player(new Tile[0]));
 
 		// Perform draw
-		game.draw();
+		game.endTurn();
 
 		// Verify hand and turn end
 		assertEquals("", game.getTable());

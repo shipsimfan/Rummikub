@@ -22,10 +22,10 @@ public class GameScoreTest {
 
 		// Play moves
 		assertEquals(0, game.getCurrentPlayer());
-		game.draw();
+		game.endTurn();
 
 		assertEquals(1, game.getCurrentPlayer());
-		game.draw();
+		game.endTurn();
 
 		assertEquals(2, game.getCurrentPlayer());
 		int meld1 = game.play("R10");

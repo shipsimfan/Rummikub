@@ -13,6 +13,8 @@ public class Game {
 	private int currentPlayer;
 	private Stack<Tile> deck;
 
+	private boolean draw;
+
 	private int winner;
 	private int[] scores;
 
@@ -49,6 +51,8 @@ public class Game {
 
 		currentPlayer = 0;
 
+		draw = true;
+
 		winner = -1;
 	}
 
@@ -56,6 +60,8 @@ public class Game {
 		table = new ArrayList<>();
 		players = new Player[] { player1, player2, player3 };
 		currentPlayer = 0;
+
+		draw = true;
 
 		winner = -1;
 
@@ -80,6 +86,9 @@ public class Game {
 	}
 
 	public void play(String tile, int meld) {
+		// Don't draw after playing
+		draw = false;
+
 		// Ignore plays after win
 		if (winner >= 0)
 			return;
@@ -130,6 +139,9 @@ public class Game {
 	}
 
 	public boolean reuse(int initialMeld, String tile, int targetMeld) {
+		// Don't draw after reusing
+		draw = false;
+
 		// Take tile from initial meld
 		Tile t = new Tile(tile);
 		List<Tile> meld = table.get(initialMeld);
@@ -166,37 +178,34 @@ public class Game {
 		return false;
 	}
 
-	public void draw() {
+	private void draw() {
 		// Remove tile from deck
 		Tile t = deck.pop();
 
 		// Give tile to current player
 		players[currentPlayer].addTile(t);
-
-		// End turn
-		endTurn();
 	}
 
 	private void resetBoard() {
 		// TODO: Reset replayed tiles
-		
-		for(int j = 0; j < table.size(); j++) {
+
+		for (int j = 0; j < table.size(); j++) {
 			List<Tile> meld = table.get(j);
-			for(int i = 0; i < meld.size(); i++) {
+			for (int i = 0; i < meld.size(); i++) {
 				Tile t = meld.get(i);
-			
-				if(t.isNewPlay()) {
+
+				if (t.isNewPlay()) {
 					// Remove from meld
 					meld.remove(i);
 					i--;
-					
+
 					// Add to players hand
 					t.clearFlags();
 					players[currentPlayer].addTile(t);
 				}
 			}
-			
-			if(meld.size() == 0) {
+
+			if (meld.size() == 0) {
 				table.remove(j);
 				j--;
 			}
@@ -213,23 +222,23 @@ public class Game {
 			// Get first tile (ignoring jokers)
 			int idx = 0;
 			Tile t1 = meld.get(idx++);
-			while(idx < meld.size() && t1.getColor() == 'J')
+			while (idx < meld.size() && t1.getColor() == 'J')
 				t1 = meld.get(idx++);
-			
-			if(t1.getColor() == 'J')
+
+			if (t1.getColor() == 'J')
 				return true; // I suppose a full meld of jokers is valid
-			
+
 			// Get second tile (ignoring jokers)
 			int runDifference = 1;
 			Tile t2 = meld.get(idx++);
-			while(idx < meld.size() && t2.getColor() == 'J') {
+			while (idx < meld.size() && t2.getColor() == 'J') {
 				t2 = meld.get(idx++);
 				runDifference++;
 			}
-				
-			if(t2.getColor() == 'J')
+
+			if (t2.getColor() == 'J')
 				return true;
-			
+
 			// Check meld type
 			if (t1.getNumber() == t2.getNumber()) {
 				// Verify set
@@ -245,30 +254,30 @@ public class Game {
 					case 'O' -> 3;
 					default -> -1;
 					};
-					
+
 					// Ignore jokers
-					if(color == -1) 
+					if (color == -1)
 						continue;
-					
-					if(colors[color])
+
+					if (colors[color])
 						return false; // Duplicate color
 					colors[color] = true;
-					
-					if(t.getNumber() != t1.getNumber())
+
+					if (t.getNumber() != t1.getNumber())
 						return false; // Wrong number
 				}
 
 			} else if (t1.getNumber() == t2.getNumber() - runDifference) {
 				// Verify run
-				for(int i = 0; i < meld.size(); i++) {
+				for (int i = 0; i < meld.size(); i++) {
 					Tile t = meld.get(i);
-					if(t.getColor() == 'J')
+					if (t.getColor() == 'J')
 						continue; // Ignore jokers
-					
-					if(t.getColor() != t1.getColor())
+
+					if (t.getColor() != t1.getColor())
 						return false; // Wrong color
-					
-					if(t.getNumber() != t1.getNumber() + i)
+
+					if (t.getNumber() != t1.getNumber() + i)
 						return false; // Wrong number
 				}
 			} else
@@ -279,13 +288,16 @@ public class Game {
 	}
 
 	public void endTurn() {
+		if (draw)
+			draw();
+
 		// Verify board
 		if (!verifyBoard()) {
 			// Reset and draw three
 			resetBoard();
-			players[currentPlayer].addTile(deck.pop());
-			players[currentPlayer].addTile(deck.pop());
-			players[currentPlayer].addTile(deck.pop());
+			draw();
+			draw();
+			draw();
 		}
 
 		// Select next player

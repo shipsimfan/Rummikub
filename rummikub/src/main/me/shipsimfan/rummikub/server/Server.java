@@ -91,7 +91,6 @@ public class Server {
 			sendToAll("");
 			sendToAll("Player " + (currentPlayer + 1) + "'s turn");
 
-			boolean draw = true;
 			while (true) {
 				clients[currentPlayer].send("Table: " + game.getTable());
 				clients[currentPlayer].send("Your hand: " + game.getCurrentHand());
@@ -101,11 +100,8 @@ public class Server {
 				if (response.equals("")) {
 					sendToAll("Board: " + game.getTable());
 
-					if (draw)
-						game.draw();
-					else
-						game.endTurn();
-
+					game.endTurn();
+					
 					break;
 				} else if (response.equals("end")) {
 					sendToAll("end");
@@ -123,8 +119,6 @@ public class Server {
 					else
 						game.reuse(initialMeld, tile);
 				} catch (NumberFormatException e) {
-					draw = false;
-
 					String meld = clients[currentPlayer].read();
 					if (meld.equals(""))
 						game.play(response);

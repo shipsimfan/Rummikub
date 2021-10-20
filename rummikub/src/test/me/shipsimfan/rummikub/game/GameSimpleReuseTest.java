@@ -74,7 +74,7 @@ public class GameSimpleReuseTest {
 		setup(new String[0], new String[] { "B11", "G11" });
 
 		// Player 1 draws
-		game.draw();
+		game.endTurn();
 
 		// Player 2 plays
 		int meld = game.play("B11");
@@ -94,7 +94,7 @@ public class GameSimpleReuseTest {
 		setup(new String[0], new String[] { "R12", "R13" });
 
 		// Player 1 draws
-		game.draw();
+		game.endTurn();
 
 		// Player 2 plays
 		int meld = game.reuse(0, "R11");
