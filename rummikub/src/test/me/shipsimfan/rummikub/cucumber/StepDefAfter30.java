@@ -14,7 +14,7 @@ Deck: B10, B11, B12, B13
  */
 
 public class StepDefAfter30 {
-	private Game game = null;
+	public static Game game = null;
 	private int last_meld = -1;
 
 	@Given("^the initial 30 points have been played")

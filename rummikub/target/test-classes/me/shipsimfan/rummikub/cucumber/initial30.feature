@@ -26,6 +26,7 @@ Feature: Playing before the initial 30 points have been earned
 		And I play "R9" to a new meld
 		And I play "G9" to the last played meld
 		And I play "B9" to the last played meld
+		And I end my turn
 		Then the board should be "{R1,B1,O1},{R9,G9,B9}"
 		And player 1's hand should be "R10,R11,R12"
 		And player 1 should have 0 points remaining

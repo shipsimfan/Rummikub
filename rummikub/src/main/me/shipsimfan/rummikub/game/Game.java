@@ -316,6 +316,13 @@ public class Game {
 		return currentPlayer;
 	}
 
+	public int getRemainingPoints(int player) {
+		if (player < 0 || player > 2)
+			throw new InvalidParameterException();
+		
+		return players[player].getRemainingPoints();
+	}
+	
 	public int getCurrentRemainingPoints() {
 		return players[currentPlayer].getRemainingPoints();
 	}
