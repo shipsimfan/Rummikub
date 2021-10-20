@@ -8,7 +8,7 @@ Feature: Playing different types of melds after the initial 30 points have been 
         And I play "O2" to the last played meld
         And I play "O3" to the last played meld
         And I end my turn
-        Then the table should be "{R10,R11,R12},{G10,B10,O10},{R9,G9,B9,O9},{O1,O2,O3}"
+        Then the board should be "{R10,R11,R12},{G10,B10,O10},{R9,G9,B9,O9},{O1,O2,O3}"
         And player 1's hand should be "R1,R1,R2,R10,R13,B1,G1,O4,O5,J"
         
     Scenario: Playing a valid 5-length run
@@ -18,7 +18,7 @@ Feature: Playing different types of melds after the initial 30 points have been 
     	And I play "O4" to the last played meld
     	And I play "O5" to the last played meld
     	And I end my turn
-    	Then the table should be "{R10,R11,R12},{G10,B10,O10},{R9,G9,B9,O9},{O1,O2,O3,O4,O5}"
+    	Then the board should be "{R10,R11,R12},{G10,B10,O10},{R9,G9,B9,O9},{O1,O2,O3,O4,O5}"
     	And player 1's hand should be "R1,R1,R2,R10,R13,B1,G1,J"
     	
     Scenario: Playing a valid run with a joker
@@ -26,7 +26,7 @@ Feature: Playing different types of melds after the initial 30 points have been 
     	And I play "J" to the last played meld
     	And I play "O3" to the last played meld
     	And I end my turn
-    	Then the table should be "{R10,R11,R12},{G10,B10,O10},{R9,G9,B9,O9},{O1,J,O3}"
+    	Then the board should be "{R10,R11,R12},{G10,B10,O10},{R9,G9,B9,O9},{O1,J,O3}"
     	And player 1's hand should be "R1,R1,R2,R10,R13,B1,G1,O2,O4,O5"
     	
     Scenario: Playing a valid 3-length set
