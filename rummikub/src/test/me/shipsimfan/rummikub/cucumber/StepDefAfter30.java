@@ -30,7 +30,7 @@ public class StepDefAfter30 {
 				new Tile("R9") };
 
 		// Create the deck
-		Tile[] deck = new Tile[] { new Tile("B10"), new Tile("B11"), new Tile("B12"), new Tile("B13") };
+		Tile[] deck = new Tile[] { new Tile("B13"), new Tile("B12"), new Tile("B11"), new Tile("B10") };
 
 		// Create the game
 		game = new Game(deck, new Player(player1Hand), new Player(player2Hand), new Player(player3Hand));
@@ -83,6 +83,6 @@ public class StepDefAfter30 {
 	
 	@Then("^player ([1-3])'s hand should be \"(.*)\"")
 	public void handCheck(int player, String hand) {
-		assertEquals(hand, game.getHand(player));
+		assertEquals(hand, game.getHand(player - 1));
 	}
 }

@@ -75,7 +75,7 @@ Feature: Playing different types of melds after the initial 30 points have been 
     Scenario: Extending a set with a joker
     	When I play "J" to meld 1
     	And I end my turn
-    	Then the board should be "{R10,R11,R12},{R1,G1,B1,J},{R9,G9,B9,O9}"
+    	Then the board should be "{R10,R11,R12},{G10,B10,O10,J},{R9,G9,B9,O9}"
     	And player 1's hand should be "R1,R1,R2,R10,R13,B1,G1,O1,O2,O3,O4,O5"
     	
     Scenario: Playing an invalid run by number
@@ -102,7 +102,7 @@ Feature: Playing different types of melds after the initial 30 points have been 
     	And player 1's hand should be "R1,R1,R2,R10,R13,B1,B10,B11,B12,G1,O1,O2,O3,O4,O5,J"
     	
     Scenario: Playing an invalid set by color
-    	When I play "O1" to a new meld
+    	When I play "R1" to a new meld
     	And I play "O1" to the last played meld
     	And I play "R1" to the last played meld
     	And I end my turn
