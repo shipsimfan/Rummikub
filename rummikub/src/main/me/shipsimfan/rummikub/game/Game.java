@@ -108,21 +108,6 @@ public class Game {
 
 		// Play tile to meld
 		table.get(meld).add(t);
-
-		// Check for winner
-		if (players[currentPlayer].getHand().equals("")) {
-			// Set winner
-			winner = currentPlayer;
-
-			// Calculate scores
-			scores = new int[] { 0, 0, 0 };
-			for (int i = 0; i < 3; i++) {
-				if (i == winner)
-					continue;
-
-				scores[i] = players[i].calculateScore();
-			}
-		}
 	}
 
 	// Reuse without target meld number creates a new meld and returns the number
@@ -308,6 +293,21 @@ public class Game {
 			draw();
 			draw();
 			draw();
+		} else {
+			// Check for winner
+			if (players[currentPlayer].getHand().equals("")) {
+				// Set winner
+				winner = currentPlayer;
+
+				// Calculate scores
+				scores = new int[] { 0, 0, 0 };
+				for (int i = 0; i < 3; i++) {
+					if (i == winner)
+						continue;
+
+					scores[i] = players[i].calculateScore();
+				}
+			}
 		}
 
 		// Select next player

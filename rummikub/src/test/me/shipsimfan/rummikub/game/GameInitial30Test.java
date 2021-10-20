@@ -40,7 +40,6 @@ public class GameInitial30Test {
 				comma = false;
 			}
 
-			table += "*";
 			table += tile;
 			hand.add(new Tile(tile));
 			comma = true;
@@ -74,18 +73,20 @@ public class GameInitial30Test {
 			else
 				game.play(tile, currentMeld);
 		}
+		
+		game.endTurn();
 
 		// Test the game state
-		assertEquals(0, game.getCurrentPlayer());
-		assertEquals(0, game.getCurrentRemainingPoints());
+		assertEquals(1, game.getCurrentPlayer());
+		assertEquals(0, game.getRemainingPoints(0));
 		assertEquals(table, game.getTable());
 
 		if (winner) {
-			assertEquals("", game.getCurrentHand());
+			assertEquals("", game.getHand(0));
 			assertTrue(game.hasWinner());
 			assertEquals(0, game.getWinner());
 		} else {
-			assertEquals("R1", game.getCurrentHand());
+			assertEquals("R1", game.getHand(0));
 			assertFalse(game.hasWinner());
 		}
 	}
