@@ -31,7 +31,9 @@ Feature: Replaying tiles from melds
 		And player 1's hand should be "B13,G1,G2,G3,G4,G10,G13,O1,O10"
 	
 	Scenario: Replaying from a 3-length run
-		When I replay "R11" from meld 2 to meld 0
+		When I replay "R10" from meld 2 to a new meld
+		And I play "O10" to the last played meld
+		And I play "G10" to the last played meld
 		And I end my turn
 		Then the board should be "{B11,G11,O11},{J,R8,R9,R10,R11,R12,R13},{R10,R11,R12},{R1,B1,G1}"
 		And player 1's hand should be "B13,G1,G2,G3,G4,G10,G13,O1,O10"
@@ -51,7 +53,7 @@ Feature: Replaying tiles from melds
 		And player 1's hand should be "B13,G1,G13,O1"
 	
 	Scenario: Replay into an invalid meld
-		When I replay "R12" from meld 2 to a new meld
+		When I replay "R13" from meld 1 to a new meld
 		And I end my turn
 		Then the board should be "{B11,G11,O11},{J,R8,R9,R10,R11,R12,R13},{R10,R11,R12},{R1,B1,G1}"
 		And player 1's hand should be "B13,G1,G2,G3,G4,G10,G13,O1,O10"
