@@ -218,9 +218,12 @@ public class Game {
 
 			// Get first tile (ignoring jokers)
 			int idx = 0;
+			int offset = 0;
 			Tile t1 = meld.get(idx++);
-			while (idx < meld.size() && t1.getColor() == 'J')
+			while (idx < meld.size() && t1.getColor() == 'J') {
 				t1 = meld.get(idx++);
+				offset++;
+			}
 
 			if (t1.getColor() == 'J')
 				return true; // I suppose a full meld of jokers is valid
@@ -235,7 +238,7 @@ public class Game {
 
 			if (t2.getColor() == 'J')
 				return true;
-
+			
 			// Check meld type
 			if (t1.getNumber() == t2.getNumber()) {
 				// Verify set
@@ -274,7 +277,7 @@ public class Game {
 					if (t.getColor() != t1.getColor())
 						return false; // Wrong color
 
-					if (t.getNumber() != t1.getNumber() + i)
+					if (t.getNumber() != t1.getNumber() + i - offset)
 						return false; // Wrong number
 				}
 			} else
