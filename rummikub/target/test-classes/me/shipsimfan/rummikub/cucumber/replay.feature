@@ -47,13 +47,13 @@ Feature: Replaying tiles from melds
 		And I replay "R10" from meld 1 to the last played meld
 		And I play "G10" to the last played meld	
 		And I end my turn
-		Then the board should be "{B11,G11,O11},{J,R8,R9},{R11,R12,R13},{R10,R11,R12},{R1,B1,G1},{O10,R10,G10}"
+		Then the board should be "{B11,G11,O11},{J,R8,R9},{R10,R11,R12},{R1,B1,G1},{O10,R10,G10},{R11,R12,R13}"
 		And player 1's hand should be "B13,G1,G13,O1"
 	
 	Scenario: Replay into an invalid meld
 		When I replay "R12" from meld 2 to a new meld
 		And I end my turn
-		Then the board should be "{B11,G11,O11},{J,R9,R10,R11,R12},{R9,R10,R11},{R1,B1,G1}"
+		Then the board should be "{B11,G11,O11},{J,R8,R9,R10,R11,R12,R13},{R10,R11,R12},{R1,B1,G1}"
 		And player 1's hand should be "B13,G1,G2,G3,G4,G10,G13,O1,O10"
 	
 	

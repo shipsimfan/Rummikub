@@ -9,6 +9,7 @@ import java.util.Stack;
 
 public class Game {
 	private List<List<Tile>> table;
+	private List<List<Tile>> table_no_move;
 	private Player[] players;
 	private int currentPlayer;
 	private Stack<Tile> deck;
@@ -56,6 +57,8 @@ public class Game {
 		initial30 = true;
 
 		winner = -1;
+
+		backup_table();
 	}
 
 	public Game(Tile[] deck, Player player1, Player player2, Player player3) {
@@ -71,6 +74,8 @@ public class Game {
 		this.deck = new Stack<Tile>();
 		for (Tile t : deck)
 			this.deck.add(t);
+
+		backup_table();
 	}
 
 	// Play without meld number creates a new meld and returns the number
@@ -175,34 +180,23 @@ public class Game {
 	}
 
 	private void resetBoard() {
-		// TODO: Reset replayed tiles
-
 		// Reset points
-		if(initial30)
+		if (initial30)
 			players[currentPlayer].resetPoints();
-		
-		// Reset newly played tiles
-		for (int j = 0; j < table.size(); j++) {
-			List<Tile> meld = table.get(j);
-			for (int i = 0; i < meld.size(); i++) {
-				Tile t = meld.get(i);
 
+		// Return newly played tiles to hand
+		for (List<Tile> meld : table) {
+			for (Tile t : meld) {
 				if (t.isNewPlay()) {
-					// Remove from meld
-					meld.remove(i);
-					i--;
-
-					// Add to players hand
 					t.clearFlags();
 					players[currentPlayer].addTile(t);
 				}
 			}
-
-			if (meld.size() == 0) {
-				table.remove(j);
-				j--;
-			}
 		}
+
+		// Reset board state
+		table = table_no_move;
+		backup_table();
 	}
 
 	private boolean verifyBoard() {
@@ -238,7 +232,7 @@ public class Game {
 
 			if (t2.getColor() == 'J')
 				return true;
-			
+
 			// Check meld type
 			if (t1.getNumber() == t2.getNumber()) {
 				// Verify set
@@ -318,7 +312,7 @@ public class Game {
 			currentPlayer = 0;
 		else
 			currentPlayer++;
-		
+
 		draw = true;
 		initial30 = getCurrentRemainingPoints() != 0;
 
@@ -326,6 +320,9 @@ public class Game {
 		for (List<Tile> meld : table)
 			for (Tile t : meld)
 				t.clearFlags();
+
+		// Copy board state
+		backup_table();
 	}
 
 	public int getCurrentPlayer() {
@@ -390,5 +387,16 @@ public class Game {
 			throw new InvalidParameterException();
 
 		return scores[player];
+	}
+
+	private void backup_table() {
+		table_no_move = new ArrayList<List<Tile>>();
+
+		for (List<Tile> meld : table) {
+			List<Tile> meld_copy = new ArrayList<Tile>();
+			for (Tile t : meld)
+				meld_copy.add((Tile) t.clone());
+			table_no_move.add(meld_copy);
+		}
 	}
 }

@@ -3,7 +3,7 @@ package me.shipsimfan.rummikub.game;
 import java.security.InvalidParameterException;
 import java.util.Comparator;
 
-public class Tile {
+public class Tile implements Cloneable {
 	enum Color {
 		RED, BLUE, GREEN, ORANGE, JOKER;
 
@@ -101,6 +101,15 @@ public class Tile {
 			return false;
 
 		return color == t.color && number == t.number;
+	}
+	
+	// Taken from https://stackoverflow.com/questions/5116264/the-method-clone-from-object-is-not-visible
+	public Object clone() {
+		try {
+			return super.clone();
+		} catch(Exception e) {
+			return null;
+		}
 	}
 
 	public static class TileComparator implements Comparator<Tile> {
